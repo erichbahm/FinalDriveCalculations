@@ -1,0 +1,39 @@
+def calc_accel_time(initialVelocity, finalVelocity, gearRatio):
+    # Input: m/s; Output: s
+    stepCount = 100
+    currentTime = 0
+    currentVelocity = initialVelocity
+    timeStep = [currentTime]
+    velocityStep = [currentVelocity]
+    for i in range(stepCount):
+        currentTime = 10 * (i + 1) / stepCount
+        currentVelocity = calc_acceleration(currentVelocity, gearRatio) * 10 * (i) / stepCount
+        timeStep.append(currentTime)
+        velocityStep.append(currentVelocity)
+    print(velocityStep)
+    print(timeStep)
+    closestValue = find_closest_value(finalVelocity, velocityStep)
+    if closestValue[0] < finalVelocity + 2.5 and closestValue[1] >= finalVelocity - 0.1:
+        return timeStep[closestValue[1]]
+    else:
+        return 0
+
+
+def find_closest_value(goalValue, valueLst):
+    val = min(valueLst, key=lambda x: abs(x - goalValue))
+    return [val, valueLst.index(val)]
+
+
+def graph_data(gearLB, gearUB, stepCount):
+    currentGR = []
+    topSpeed = []
+    peakAcceleration = []
+    ztsTime = []
+    for i in range(stepCount):
+        geari = gearLB + (gearUB - gearLB) / stepCount * i
+        currentGR.append(geari)
+        peakAcceleration.append(calc_acceleration(0, geari))
+    df = pd.DataFrame({'Gear Ratio': currentGR, 'Peak Acceleration': peakAcceleration})
+    writer = pd.ExcelWriter('Simple_gear_ratio_calcs.xlsx', engine='xlsxwriter')
+    df.to_excel(writer, sheet_name="Garbage Data")
+    writer.save()
