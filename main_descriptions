@@ -1,0 +1,65 @@
+VARIABLE SOURCES
+carMass: 500 lbs estimate (RM 25 was 433)
+motorTorque:
+Peak continuous torque = 40.5
+Peak torque = 98.82
+inclineAngle: Assumed to be flat
+airDensity: Assumed to be at STP
+dragCoefficient and liftCoefficient:
+Based on Aero kit from RM 25, Cd*A; waiting on goals to be set
+https://docs.google.com/document/d/1L9KkrQ_rOewQw6zaPe7SLSyp95vejZjmhiVNDEELFjQ/edit
+https://docs.google.com/presentation/d/1RiWhsmsm2xMppG4BmtRdmz7nIUSn-UM74VfPhpDbjWQ/edit#slide=id.g129e0a7a28b_0_147
+resistiveCoefficient: Estimation from a random article (http://hpwizard.com/tire-friction-coefficient.html)
+tireRadius:
+Based on unloaded RM 25 tires
+Constant below 200 kph
+mu = rolling resistance / (weight * cos(inclineAngle))
+mu = Fx / Fz
+Rolling resistance is the force necessary to pull the axle of a tire horizontally in the direction of travel
+
+GRAVITY = 9.80665  # Gravitational acceleration (m/s^2)
+CARWEIGHT = 2668.93  # Total EXPECTED weight of all components in the car including the driver (N)
+CARMASS = CARWEIGHT / GRAVITY  # Total EXPECTED mass of all components in the car including the driver (kg)
+tireRadius = 0.2032  # Tread radius of each tire (m)
+TIREINERTIA = 0.0501877  # (kgm^2)
+TIREMASS = 3.17515  # kg
+MOTORMAXRPM = 5500  # (RPM)
+DRIVENRESISTANCE = 0.02 * 120  # (Nm)
+DRIVINGRESISTANCE = 0.1 * 120  # (Nm)
+DRIVENINERTIA = 0.13
+DRIVINGINERTIA = 0.0383
+AREA = 1 # Front facing AREA of the car (m^2)
+RESISTIVECOEFFICIENT = 0.015 # Coefficient of rolling resistance of each tire; 0.03 in worst case scenario
+LIFTCOEFFICIENT = 3.22 # Coefficient of lift - Cl
+DRAGCOEFFICIENT = 1.57 # Coefficient of Drag - Cd
+GEARDEFAULT = 6
+AIRDENSITY = 1.2754 # Density of air during given conditions (kg/m^3)
+
+MISSING ITEMS
+ITERATIVELY GRAPH DATA (zsTime - zero to sixty time, torque curve) USING EQUATIONS
+ -> Graph 0-60 time with respect to gear ratios THEN create torque curve at each value?
+
+FUTURE GOALS
+1. Find an actual value for resistive coefficient
+ -> TTC: https://www.fsaettc.org/viewtopic.php?t=193&sid=88c5b9421b543e327d02bfdaf2b3eb44
+ -> Applied Dimensional Analysis and modeling Ch. 8
+ -> https://www.sciencedirect.com/topics/engineering/rolling-resistance-coefficient
+ -> According to TTC forums, finding rolling resistance may be impossible
+2. Account for tire rolling radius or loaded radius (maybe)
+ -> rollingRadius (https://www.youtube.com/watch?v=rQl5_x3Aijs) RM 25: 16.0x7.5-10 R25B (Hoosier 43075)
+ -> Spring rate data https://www.hoosiertire.com/contingency_rates/fas/
+ -> TTC shows rolling radius at different RPMs, Temps, etc
+3. Account for chain stretch
+4. Account for different motor setup?
+5. Including calculations using efficiency rather than internal system friction
+
+
+FUNCTIONS
+def output_torque(carVelocity, gearRatio):
+    tireAngularVelocity = carVelocity / tireRadius
+    h = 2 * math.pi * tireRadius * gearRatio
+    a = CARMASS * tireRadius * gearRatio
+    b = AIRDENSITY * AREA * h ^ 2 * (DRAGCOEFFICIENT + 4 * LIFTCOEFFICIENT * RESISTIVECOEFFICIENT)
+    c = 4 * RESISTIVECOEFFICIENT * CARWEIGHT * math.cos(INCLINEANGLE) + CARWEIGHT * math.sin(INCLINEANGLE)
+    tireAngularAcceleration = 0  # Unsure how to get this number
+    return MOMENTINERTIA * tireAngularAcceleration + gearRatio * tireRadius * (a * tireAngularAcceleration + b * (tireAngularVelocity ^ 2) + c) + INTERNALFRICTION

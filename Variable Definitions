@@ -1,0 +1,44 @@
+gear ratio default
+gravitational acceleration (m/s)
+car total weight (N)
+car total mass (kg)
+car front area (m^2)
+rear vs. front center of gravity (%)
+air density (kg/m^3)
+    lift coefficient
+    drag coefficient
+voltage (V)
+    current (A)
+    power (W)
+    motor rpm (1/min)
+    motor torque (Nm)
+    motor efficiency (%)
+motor moment of inertia
+driving moment of inertia
+driven moment of inertia
+
+motor moment of inertia (kgm^2)
+motor shaft moment of inertia (kgm^2)
+motor shaft bearing moment of inertia (kgm^2)
+motor shaft bearing resistance (Nm)
+motor sprocket moment of inertia (kgm^2)
+chain moment of inertia (kgm^2)
+chain resistance (Nm)
+    chain tension (???)
+left differential bearing moment of inertia (kgm^2)
+left differential bearing resistance (Nm)
+right differential bearing moment of inertia (kgm^2)
+right differential bearing resistance (Nm)
+differential sprocket moment of inertia (kgm^2)
+differential moment of inertia (kgm^2)
+differential efficiency (%)
+tripod joint moment of inertia (kgm^2)
+tripod joint resistance (Nm)
+tripod housing moment of inertia (kgm^2)
+half shaft moment of inertia (kgm^2)
+tire moment of inertia (kgm^2)
+tire coefficient of rolling resistance
+tire coefficient of friction
+tire radius (m)
+    tire slip ratio (%)
+    tire grip (N)

@@ -1,0 +1,15 @@
+DEFGEAR
+g
+W
+m
+AREA
+CG
+AIRDENSITY
+    cl
+    cd
+VOLTAGE
+    current
+    power
+    motorRPM
+    motorTrq
+    motorEff
