@@ -1,2 +1,2 @@
 # finalDriveCalculations
-Calculations related to the powertrain of RM26. 
+Powertrain calculations relating gear ratios, torque output, top speed, and lap-times. 
